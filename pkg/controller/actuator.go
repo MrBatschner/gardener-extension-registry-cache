@@ -108,6 +108,9 @@ func (a *actuator) Migrate(ctx context.Context, log logr.Logger, ex *extensionsv
 	return nil
 }
 
+// NewClientForShoot is a pointer to util.NewClientForShoot()
+var NewClientForShoot = util.NewClientForShoot
+
 func (a *actuator) createResources(ctx context.Context, log logr.Logger, registryConfig *v1alpha1.RegistryConfig, cluster *controller.Cluster, namespace string) error {
 	registryImage, err := imagevector.ImageVector().FindImage("registry")
 	if err != nil {
@@ -155,7 +158,7 @@ func (a *actuator) createResources(ctx context.Context, log logr.Logger, registr
 	}
 
 	// get service IPs from shoot
-	_, shootClient, err := util.NewClientForShoot(ctx, a.client, cluster.ObjectMeta.Name, client.Options{}, extensionsconfig.RESTOptions{})
+	_, shootClient, err := NewClientForShoot(ctx, a.client, cluster.ObjectMeta.Name, client.Options{}, extensionsconfig.RESTOptions{})
 	if err != nil {
 		return fmt.Errorf("shoot client cannot be crated: %w", err)
 	}
